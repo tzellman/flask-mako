@@ -7,7 +7,12 @@ from flask import g, request, session, get_flashed_messages, url_for
 def init_mako(app):
     app = app
     get = app.config.get
-    dirs = get('MAKO_DIRECTORIES', get('MAKO_DIRECTORY', '.'))
+    
+    dirOps = filter(lambda x: x in app.config,
+                    map(lambda x: 'MAKO_%s' % x, ('DIRS', 'DIRECTORIES', 'DIR', 'DIRECTORY')))
+    dirs = len(dirOps) and get(dirOps[0]) or ['.']
+    if type(dirs) == str:
+        dirs = dirs.split(' ')
     lookup = TemplateLookup(directories=dirs,
                             input_encoding=get('MAKO_INPUT_ENCODING', 'utf-8'),
                             output_encoding=get('MAKO_OUTPUT_ENCODING', 'utf-8'),
