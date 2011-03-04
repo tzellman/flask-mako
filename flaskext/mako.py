@@ -7,6 +7,10 @@ from flask import _request_ctx_stack
 
 
 def init_mako(app, **kw):
+    """
+    Initializes the Mako TemplateLookup based on the application configuration
+    and updates the _request_ctx_stack before each request
+    """ 
     app = app
     
     def get_first(dicts, keys, default=None):
@@ -24,12 +28,13 @@ def init_mako(app, **kw):
         dirs = dirs.split(' ')
     
     get = app.config.get
-    lookup = TemplateLookup(directories=dirs,
-                            input_encoding=get('MAKO_INPUT_ENCODING', 'utf-8'),
-                            output_encoding=get('MAKO_OUTPUT_ENCODING', 'utf-8'),
-                            module_directory=get('MAKO_CACHEDIR', None),
-                            collection_size=get('MAKO_CACHESIZE', None),
-                            imports=get('MAKO_IMPORTS', None))
+    kw['input_encoding'] = kw.pop('input_encoding', get('MAKO_INPUT_ENCODING', 'utf-8'))
+    kw['output_encoding'] = kw.pop('output_encoding', get('MAKO_OUTPUT_ENCODING', 'utf-8'))
+    kw['module_directory'] = kw.pop('module_directory', get('MAKO_CACHEDIR', None))
+    kw['collection_size'] = kw.pop('collection_size', get('MAKO_CACHESIZE', None))
+    kw['imports'] = kw.pop('imports', get('MAKO_IMPORTS', None))
+    
+    lookup = TemplateLookup(directories=dirs, **kw)
     
     @app.before_request
     def before_request():
