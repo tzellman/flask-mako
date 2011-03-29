@@ -49,9 +49,10 @@ def render_template(path, **kw):
     """
     try:
         render = _request_ctx_stack.top._mako_lookup.get_template(path).render
+    except AttributeError, e:
+        from flask import render_template
+        return render_template(path, **kw)
+    else:
         return render(g=g, request=request,
                       get_flashed_messages=get_flashed_messages,
                       session=session, url_for=url_for, **kw)
-    except AttributeError:
-        from flask import render_template
-        return render_template(path, **kw)
