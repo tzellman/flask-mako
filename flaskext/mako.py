@@ -31,7 +31,7 @@ def init_mako(app, **kw):
     kw['input_encoding'] = kw.pop('input_encoding', get('MAKO_INPUT_ENCODING', 'utf-8'))
     kw['output_encoding'] = kw.pop('output_encoding', get('MAKO_OUTPUT_ENCODING', 'utf-8'))
     kw['module_directory'] = kw.pop('module_directory', get('MAKO_CACHEDIR', None))
-    kw['collection_size'] = kw.pop('collection_size', get('MAKO_CACHESIZE', None))
+    kw['collection_size'] = kw.pop('collection_size', get('MAKO_CACHESIZE', -1))
     kw['imports'] = kw.pop('imports', get('MAKO_IMPORTS', None))
     
     lookup = TemplateLookup(directories=dirs, **kw)
