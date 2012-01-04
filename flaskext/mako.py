@@ -10,8 +10,7 @@ def init_mako(app, **kw):
     """
     Initializes the Mako TemplateLookup based on the application configuration
     and updates the _request_ctx_stack before each request
-    """ 
-    app = app
+    """
     
     def get_first(dicts, keys, default=None):
         # look in one or more dictionaries returning the first found value
